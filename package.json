@@ -1,6 +1,6 @@
 {
   "name": "ember-webpack-hot-reload",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": false,
   "description": "Builds EmberJS apps with Webpack",
   "repository": {
@@ -31,7 +31,7 @@
     "start:js": "rollup --config --watch --no-watch.clearScreen",
     "start:types": "glint --declaration --watch",
     "test": "echo 'A v2 addon does not have tests, run tests in test-app'",
-    "prepack": "rollup --config"
+    "prepack": "pnpm build"
   },
   "dependencies": {
     "@babel/core": "^7.14.5",
