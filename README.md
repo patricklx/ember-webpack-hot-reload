@@ -1,6 +1,6 @@
 # ember-webpack-hot-reload
 
-[Short description of the addon.]
+Ember Webpack server with hot reload
 
 ## Compatibility
 
@@ -15,7 +15,9 @@ ember install ember-webpack-hot-reload
 
 ## Usage
 
-[Longer description of how to use the addon in apps.]
+```js
+return require('@embroider/compat').compatBuild(app, require('ember-webpack-hot-reload').Webpack, {...});
+```
 
 ## Contributing
 

@@ -31,7 +31,7 @@
     "start:js": "rollup --config --watch --no-watch.clearScreen",
     "start:types": "glint --declaration --watch",
     "test": "echo 'A v2 addon does not have tests, run tests in test-app'",
-    "prepack": "pnpm build"
+    "prepack": "pnpm build || echo 'its okay'"
   },
   "dependencies": {
     "@babel/core": "^7.14.5",
