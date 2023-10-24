@@ -1,0 +1,63 @@
+{
+  "name": "@embroider/webpack",
+  "version": "3.2.0",
+  "private": false,
+  "description": "Builds EmberJS apps with Webpack",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/embroider-build/embroider.git",
+    "directory": "packages/webpack"
+  },
+  "license": "MIT",
+  "author": "Edward Faulkner",
+  "main": "src/ember-webpack.js",
+  "files": [
+    "src/**/*.js",
+    "src/**/*.d.ts",
+    "src/**/*.js.map"
+  ],
+  "scripts": {},
+  "dependencies": {
+    "@babel/core": "^7.14.5",
+    "@embroider/babel-loader-9": "^3.1.0",
+    "@embroider/hbs-loader": "^3.0.2",
+    "@embroider/shared-internals": "^2.5.0",
+    "@types/supports-color": "^8.1.0",
+    "assert-never": "^1.2.1",
+    "babel-loader": "^8.2.2",
+    "babel-preset-env": "^1.7.0",
+    "css-loader": "^5.2.6",
+    "csso": "^4.2.0",
+    "debug": "^4.3.2",
+    "escape-string-regexp": "^4.0.0",
+    "fs-extra": "^9.1.0",
+    "jsdom": "^16.6.0",
+    "lodash": "^4.17.21",
+    "mini-css-extract-plugin": "^2.5.3",
+    "semver": "^7.3.5",
+    "source-map-url": "^0.4.1",
+    "style-loader": "^2.0.0",
+    "supports-color": "^8.1.0",
+    "terser": "^5.7.0",
+    "thread-loader": "^3.0.4"
+  },
+  "devDependencies": {
+    "@embroider/core": "^3.3.0",
+    "@types/csso": "^3.5.1",
+    "@types/debug": "^4.1.5",
+    "@types/fs-extra": "^9.0.12",
+    "@types/lodash": "^4.14.170",
+    "@types/mini-css-extract-plugin": "^1.4.3",
+    "@types/node": "^15.12.2",
+    "@types/semver": "^7.3.6",
+    "typescript": "^5.1.6",
+    "webpack": "^5.38.1"
+  },
+  "peerDependencies": {
+    "@embroider/core": "^3.3.0",
+    "webpack": "^5.0.0"
+  },
+  "engines": {
+    "node": "12.* || 14.* || >= 16"
+  }
+}

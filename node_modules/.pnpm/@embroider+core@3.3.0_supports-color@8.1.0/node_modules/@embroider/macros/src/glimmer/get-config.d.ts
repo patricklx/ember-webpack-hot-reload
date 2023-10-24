@@ -1,0 +1,4 @@
+import type { RewrittenPackageCache } from '@embroider/shared-internals';
+export default function getConfig(node: any, userConfigs: {
+    [packageRoot: string]: unknown;
+}, baseDir: string | undefined, moduleName: string, own: boolean, packageCache: RewrittenPackageCache): any;

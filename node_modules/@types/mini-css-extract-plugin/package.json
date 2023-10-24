@@ -1,0 +1,48 @@
+{
+    "name": "@types/mini-css-extract-plugin",
+    "version": "1.4.3",
+    "description": "TypeScript definitions for mini-css-extract-plugin",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "JounQin",
+            "url": "https://github.com/JounQin",
+            "githubUsername": "JounQin"
+        },
+        {
+            "name": "Katsuya Hino",
+            "url": "https://github.com/dobogo",
+            "githubUsername": "dobogo"
+        },
+        {
+            "name": "Spencer Miskoviak",
+            "url": "https://github.com/skovy",
+            "githubUsername": "skovy"
+        },
+        {
+            "name": "Piotr Błażejewicz",
+            "url": "https://github.com/peterblazejewicz",
+            "githubUsername": "peterblazejewicz"
+        },
+        {
+            "name": "James Garbutt",
+            "url": "https://github.com/43081j",
+            "githubUsername": "43081j"
+        }
+    ],
+    "main": "",
+    "types": "index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+        "directory": "types/mini-css-extract-plugin"
+    },
+    "scripts": {},
+    "dependencies": {
+        "@types/node": "*",
+        "tapable": "^2.2.0",
+        "webpack": "^5"
+    },
+    "typesPublisherContentHash": "a890917d6d00a9fc81b6e8905f4736bedc566a00e29b38347bd938c0ab1681df",
+    "typeScriptVersion": "3.7"
+}

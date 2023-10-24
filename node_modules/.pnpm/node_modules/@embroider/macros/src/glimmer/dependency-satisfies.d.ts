@@ -1,0 +1,2 @@
+import type { RewrittenPackageCache } from '@embroider/shared-internals';
+export default function dependencySatisfies(node: any, baseDir: string | undefined, moduleName: string, packageCache: RewrittenPackageCache): boolean;
