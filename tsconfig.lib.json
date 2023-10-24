@@ -1,0 +1,12 @@
+{
+  "include": [
+    "lib/**/*",
+    "types/ember.d.ts",
+    "types/global.d.ts"
+  ],
+  "compilerOptions": {
+    "allowJs": true,
+    "noEmitOnError": false,
+    "outDir": "dist/lib"
+  }
+}
