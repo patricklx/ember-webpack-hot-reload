@@ -1,6 +1,6 @@
 {
   "name": "ember-webpack-hot-reload",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": false,
   "description": "Builds EmberJS apps with Webpack",
   "repository": {
@@ -10,13 +10,13 @@
   },
   "license": "MIT",
   "author": "Edward Faulkner",
-  "main": "dist/ember-webpack.js",
+  "main": "dist/lib/ember-webpack.js",
   "files": [
     "addon-main.cjs",
     "dist"
   ],
   "scripts": {
-    "build": "concurrently 'npm:build:*'",
+    "build": "concurrently 'pnpm:build:*'",
     "build:js": "rollup --config",
     "build:lib": "tsc --p tsconfig.lib.json",
     "build:types": "glint --declaration",
