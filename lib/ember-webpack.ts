@@ -215,7 +215,7 @@ const Webpack: PackagerConstructor<Options> = class Webpack implements Packager 
         let babelLoaderPrefix = `babel-loader-9?${JSON.stringify(babelLoaderOptions.options)}!`;
         let htmlWebpackLoader = require.resolve('html-webpack-plugin/lib/loader');
         let emberHtmlLoader = require.resolve('./ember-html-loader');
-        let indexHtml = path.resolve(__dirname, '..', 'node_modules', '.embroider', 'rewritten-app', 'index.html')
+        let indexHtml = path.resolve(process.cwd(), '..', 'node_modules', '.embroider', 'rewritten-app', 'index.html')
 
         return {
             mode: variant.optimizeForProduction ? 'production' : 'development',
@@ -230,6 +230,12 @@ const Webpack: PackagerConstructor<Options> = class Webpack implements Packager 
                 compiler => {
                     compiler.hooks.done.tapPromise('EmbroiderPlugin', async stats => {
                         this.summarizeStats(stats, variant, variantIndex);
+                        this.currentBuildPromiseResolve?.();
+                        let appInfo = this.examineApp();
+                        const webpack = this.getWebpack(appInfo);
+                        if (webpack instanceof WebpackDevServer) {
+                            return;
+                        }
                         await this.writeFiles(this.bundleSummary, this.lastAppInfo!, variantIndex);
                     });
                 },
@@ -335,7 +341,7 @@ const Webpack: PackagerConstructor<Options> = class Webpack implements Packager 
                 enabled: true as boolean|undefined,
                 historyApiFallback: true,
                 static: {
-                    directory: path.join(__dirname, '..', 'node_modules','.embroider', 'rewritten-app'),
+                    directory: path.resolve(process.cwd(), 'node_modules','.embroider', 'rewritten-app'),
                     watch: false
                 },
                 hot: 'only',
