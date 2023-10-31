@@ -145,7 +145,7 @@ var hotAstProcessor = {
           if (p.parentNode.params[0].original?.includes('.')) return;
           const sub = glimmer.builders.sexpr(
             node.original,
-            [[p.parentNode.params[0]]],
+            [p.parentNode.params[0]],
             glimmer.builders.hash([]),
           );
           const param = glimmer.builders.sexpr(
