@@ -248,7 +248,7 @@ const Webpack: PackagerConstructor<Options> = class Webpack implements Packager 
                     chunks: [
                         'assets/test.js'
                     ],
-                    template: `!!${htmlWebpackLoader}?force=true!${emberHtmlLoader}?appName=${packageName}!${indexHtml}}`
+                    template: `!!${htmlWebpackLoader}?force=true!${emberHtmlLoader}?appName=${packageName}!${indexHtml}`
                 }),
             ],
             node: false,
@@ -362,7 +362,7 @@ const Webpack: PackagerConstructor<Options> = class Webpack implements Packager 
         this.lastAppInfo = appInfo;
         this.lastWebpack = webpack(config);
         if (config && config[0]?.devServer.enabled) {
-            let options = { ...devServerOptions, ...(this.extraConfig.devServer || {}) };
+            let options = { ...devServerOptions, ...(this.extraConfig?.devServer || {}) };
             delete options.devServer.enabled;
             const server = new WebpackDevServer(options.devServer as any, this.lastWebpack);
             server.start();
