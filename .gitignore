@@ -1,4 +1,6 @@
 *
+!__tests__
+!__tests__/**/*
 !declarations
 !declarations/**/*
 !lib

@@ -145,8 +145,8 @@ var hotAstProcessor = {
           if (p.parentNode.params[0].original?.includes('.')) return;
           const sub = glimmer.builders.sexpr(
             node.original,
-            [...p.parentNode.params],
-            { ...p.parentNode.hash },
+            [[p.parentNode.params[0]]],
+            glimmer.builders.hash([]),
           );
           const param = glimmer.builders.sexpr(
             'webpack-hot-reload',
@@ -158,6 +158,7 @@ var hotAstProcessor = {
               ),
             ]),
           );
+          p.parentNode.params.splice(0, 1);
           params.push(param);
           const name = node.original + '_' + this.counter;
           blockParams.push(name);
@@ -212,6 +213,11 @@ var hotAstProcessor = {
           [{ ...p.parentNode }],
           blockParams,
         );
+        if (p.parentNode.type === 'SubExpression') {
+          changes.push([p.parentNode, param]);
+          this.counter++;
+          return;
+        }
         const b = glimmer.builders.block(letBlock, params, null, block);
         changes.push([p.parentNode!, b]);
         this.counter++;
@@ -376,7 +382,7 @@ export default function hotReplaceAst({ types: t }: { types: BabelTypes }) {
             templateImportSpecifier = (def as any).local.name;
             tracked = path.scope.generateUidIdentifier('tracked');
             importVar = path.scope.generateUidIdentifier('__imports__');
-            node.body.push(
+            node.body.splice(0, 0,
               t.importDeclaration(
                 [t.importSpecifier(tracked, t.stringLiteral('tracked'))],
                 t.stringLiteral('@glimmer/tracking'),
@@ -437,6 +443,15 @@ export default function hotReplaceAst({ types: t }: { types: BabelTypes }) {
               ) {
                 call.arguments[0].value = hotAstProcessor.processAst(
                   call.arguments[0].value,
+                );
+              }
+              if (
+                  (call.callee as V8IntrinsicIdentifier).name ===
+                  'precompileTemplate' &&
+                  call.arguments[0]?.type === 'TemplateLiteral'
+              ) {
+                call.arguments[0].quasis[0].value.raw = hotAstProcessor.processAst(
+                    call.arguments[0].quasis[0].value.raw,
                 );
               }
             },
