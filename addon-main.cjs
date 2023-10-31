@@ -15,7 +15,7 @@ Object.assign(module.exports, {
     return addonOptions.babel;
   },
   included(...args) {
-    this._getBabelOptions().plugins.splice(0, 0, [require.resolve('./dist/babel-plugin')]);
+    this._getBabelOptions().plugins.splice(0, 0, [require.resolve('./dist/lib/babel-plugin.js')]);
     included.call(this, ...args);
   }
 })

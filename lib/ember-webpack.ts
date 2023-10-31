@@ -344,7 +344,7 @@ const Webpack: PackagerConstructor<Options> = class Webpack implements Packager 
                     directory: path.resolve(process.cwd(), 'node_modules','.embroider', 'rewritten-app'),
                     watch: false
                 },
-                hot: 'only',
+                hot: true,
             },
         }
         let config = this.variants.map((variant, variantIndex) =>
@@ -353,7 +353,7 @@ const Webpack: PackagerConstructor<Options> = class Webpack implements Packager 
         this.lastAppInfo = appInfo;
         this.lastWebpack = webpack(config);
         if (config && config[0]?.devServer.enabled) {
-            let options = { ...devServerOptions };
+            let options = { ...devServerOptions, ...(this.extraConfig.devServer || {}) };
             delete options.devServer.enabled;
             const server = new WebpackDevServer(options.devServer as any, this.lastWebpack);
             server.start();
