@@ -1,15 +1,17 @@
 {
   "name": "ember-webpack-hot-reload",
-  "version": "0.5.0",
+  "version": "0.6.0",
+  "keywords": [
+    "ember-addon"
+  ],
   "private": false,
-  "description": "Builds EmberJS apps with Webpack",
+  "description": "Builds EmberJS apps with Webpack Dev Server and Hot Reload",
   "repository": {
     "type": "git",
-    "url": "https://github.com/embroider-build/embroider.git",
-    "directory": "packages/webpack"
+    "url": "https://github.com/patricklx/ember-webpack-hot-reload"
   },
   "license": "MIT",
-  "author": "Edward Faulkner",
+  "author": "Patrick Pircher",
   "main": "dist/lib/ember-webpack.js",
   "files": [
     "addon-main.cjs",
@@ -112,10 +114,6 @@
   "ember-addon": {
     "version": 2,
     "type": "addon",
-    "main": "addon-main.cjs",
-    "app-js": {
-      "./instance-initializers/webpack-hot-reload.js": "./dist/_app_/instance-initializers/webpack-hot-reload.js",
-      "./services/webpack-hot-reload.js": "./dist/_app_/services/webpack-hot-reload.js"
-    }
+    "main": "addon-main.cjs"
   }
 }

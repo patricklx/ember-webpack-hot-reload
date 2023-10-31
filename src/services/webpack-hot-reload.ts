@@ -5,12 +5,11 @@ import EmberComponent, {
   setComponentTemplate,
 } from '@ember/component';
 import Ember from 'ember';
-import config from '../config/environment';
-import Resolver from 'ember-resolver';
 import GlimmerComponent from '@glimmer/component';
 import { getOwner } from '@ember/owner';
 import RouterService from '@ember/routing/router-service';
 import Router from '@ember/routing/router';
+import Controller from '@ember/controller';
 
 const TemplateOnlyComponent =
   Ember.__loader.require('@glimmer/runtime').TemplateOnlyComponent;
@@ -25,33 +24,42 @@ function getLatestChange(obj) {
 }
 
 
-const modulePrefix = config.modulePrefix;
+let modulePrefix!: string;
+let podModulePrefix!: string;
 if (import.meta.webpackHot) {
-  const resolverResolve = Resolver.prototype.resolve;
-  Resolver.prototype.resolve = function (name) {
-    name = name.replace(/--hot-version--.*$/, '');
-    return resolverResolve.call(this, name);
-  };
-
   const ModuleMap = new Map();
 
   window.emberHotReloadPlugin = {
     changed: {},
     subscribers: [],
     version: 1,
-
-    loadNew(oldModule: any, newModule: any) {
+    moduleDepCallbacks: {},
+    versionMap: {},
+    clear(module) {
+      this.moduleDepCallbacks[module.id] = {};
+    },
+    register(module, dep, callback) {
+      dep = dep.replace(new RegExp(`^${modulePrefix}/`), './');
+      this.moduleDepCallbacks[module.id][dep] = this.moduleDepCallbacks[module.id][dep] || [];
+      this.moduleDepCallbacks[module.id][dep].push(callback);
+    },
+    loadNew(oldModule, newModule) {
+      newModule.parents.forEach((p) => {
+        const mId = newModule.id.split('.').slice(0, -1).join('.');
+        this.moduleDepCallbacks[p]?.[mId]?.forEach(cb=>cb(newModule));
+      })
       const id = oldModule.id
         .replace('./', modulePrefix + '/')
         .replace(/\.(hbs|ts|js|gjs|gts)/, '');
       requirejs(id);
+      this.versionMap[id] = newModule.version;
       if (
         oldModule.exports.default?.prototype instanceof EmberComponent ||
         oldModule.exports.default?.prototype instanceof GlimmerComponent ||
         (oldModule.exports.default?.__meta && oldModule.exports.default?.__id)
       ) {
         const entry = Object.entries(requirejs.entries).find(([key, value]) => {
-          const klass = (value as any).module.exports?.default;
+          const klass = value.module.exports?.default;
           return (
             klass &&
             (klass === oldModule.exports.default ||
@@ -122,33 +130,30 @@ if (import.meta.webpackHot) {
       if (ModuleMap.get(module.id)) {
         this.changed[module.id] = {
           old: ModuleMap.get(module.id),
-          new: module,
+          new: module
         };
       }
       module.version = this.version;
       ModuleMap.set(module.id, module);
       return true;
     },
-
     notifyNew() {
       this.version += 1;
       Object.values(this.changed).forEach((change) => {
         this.loadNew(change.old, change.new);
-        this.subscribers.forEach((fn) => fn(change.old, change.new));
+        this.subscribers.forEach(fn => fn(change.old, change.new));
       });
       this.changed = {};
     },
-
     subscribe(fn) {
       this.subscribers.push(fn);
     },
-
     unsubscribe(fn) {
       const idx = this.subscribers.indexOf(fn);
       if (idx >= 0) {
         this.subscribers.splice(idx, 1);
       }
-    },
+    }
   };
 
   import.meta.webpackHot.addStatusHandler((status) => {
@@ -167,59 +172,63 @@ export default class WebpackHotReloadService extends Service {
 
   init() {
     super.init();
+    console.log('this')
+    modulePrefix = getOwner(this)!.application.modulePrefix;
+    podModulePrefix = getOwner(this)!.application.podModulePrefix;
     this.router._router;
     Object.defineProperty(this.router._router, '_routerMicrolib', {
       set(v) {
         const getRoute = v.getRoute;
         v.getRoute = function (name) {
           return getRoute.call(this, `${name}--hot-version--${window.emberHotReloadPlugin.version}`);
-        }
+        };
         this.___routerMicrolib = v;
       },
       get() {
-        return this.___routerMicrolib
+        return this.___routerMicrolib;
       }
-    })
+    });
     this.container = getOwner(this)?.__container__;
     window.emberHotReloadPlugin.subscribe((oldModule, newModule) => {
-      const owner = getOwner(this);
       const types = ['route', 'controller', 'template', 'modifier', 'helper', 'component'];
       Object.keys(this.container.cache).forEach((k) => {
         if (types.some(t => k.startsWith(`${t}:`))) {
           delete this.container.cache[k];
         }
-      })
-      Object.keys(this.container.factoryManagerCache).forEach((k) => {
+      });
+      Object.keys(this.container.factoryManagerCache).forEach(k => {
         if (types.some(t => k.startsWith(`${t}:`))) {
           delete this.container.factoryManagerCache[k];
         }
-      })
-      Object.keys(this.container.registry._resolveCache).forEach((k) => {
+      });
+      Object.keys(this.container.registry._resolveCache).forEach(k => {
         if (types.some(t => k.startsWith(`${t}:`))) {
           delete this.container.registry._resolveCache[k];
         }
-      })
-      Object.keys(this.container.validationCache).forEach((k) => {
+      });
+      Object.keys(this.container.validationCache).forEach(k => {
         if (types.some(t => k.startsWith(`${t}:`))) {
           delete this.container.validationCache[k];
         }
-      })
-      Object.keys(this.container.registry.registrations).forEach((k) => {
+      });
+      Object.keys(this.container.registry.registrations).forEach(k => {
         if (types.some(t => k.startsWith(`${t}:`))) {
           delete this.container.registry.registrations[k];
         }
-      })
-
-      if (oldModule.exports.default && oldModule.exports.default instanceof Router) {
+      });
+      if (oldModule.exports.default?.prototype && oldModule.exports.default.prototype instanceof Router) {
+        this.router.refresh();
+      }
+      if (oldModule.exports.default?.prototype && oldModule.exports.default.prototype instanceof Controller) {
         this.router.refresh();
       }
       if (oldModule.id.startsWith('./templates/') && !oldModule.id.startsWith('./templates/components/')) {
         this.router.refresh();
       }
-      if (oldModule.id.startsWith(`./${config.podModulePrefix}/`)) {
+      if (oldModule.id.startsWith(`./${podModulePrefix}/`)) {
         this.router.refresh();
       }
-    })
+    });
   }
   getLatestChange(obj) {
     return getLatestChange(obj);
@@ -232,6 +241,6 @@ export default class WebpackHotReloadService extends Service {
 // like `@service('hot-reload') declare altName: HotReloadService;`.
 declare module '@ember/service' {
   interface Registry {
-    'webpack-hot-reload': WebpackHotReloadService;
+    'hot-reload': WebpackHotReloadService;
   }
 }
