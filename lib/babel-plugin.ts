@@ -1,5 +1,5 @@
 import type * as BabelCoreNamespace from '@babel/core';
-import core_1, { NodePath, parse, PluginObj } from '@babel/core';
+import { NodePath, parse, PluginObj } from '@babel/core';
 import type * as BabelTypesNamespace from '@babel/types';
 import { ExpressionStatement, Identifier, ImportDeclaration, Program, V8IntrinsicIdentifier } from '@babel/types';
 import * as glimmer from '@glimmer/syntax';
@@ -318,8 +318,8 @@ var hotAstProcessor = {
 };
 
 export default function hotReplaceAst({ types: t }: { types: BabelTypes }) {
-  const imports: string[] = [];
-  const importMap: Record<string, string> = {};
+  let imports: string[] = [];
+  let importMap: Record<string, string> = {};
   let tracked: Identifier;
   let importVar: Identifier;
   let templateImportSpecifier = '';
@@ -470,7 +470,7 @@ export default function hotReplaceAst({ types: t }: { types: BabelTypes }) {
             ),
           );
           const hotAccepts: ExpressionStatement[] = [];
-          const ast = (0, core_1.parse)("window.emberHotReloadPlugin.clear(__webpack_module__)");
+          const ast = parse("window.emberHotReloadPlugin.clear(__webpack_module__)");
           hotAccepts.push(ast.program.body[0]!);
           for (const imp of [...usedImports]) {
             const { source, specifiers } = importMap[imp];
