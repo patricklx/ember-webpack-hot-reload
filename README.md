@@ -5,7 +5,7 @@ Ember Webpack server with hot reload.
 this can hot reload
 * helpers
 * modifiers
-* components + templates, fcct components
+* components + templates, fcct components and its deps
 * routes/controllers/route-templates (although it refreshes the whole route and thus looses all state)
 
 it cannot hot reload local properties that turn out to be helpers/modifiers/components.
