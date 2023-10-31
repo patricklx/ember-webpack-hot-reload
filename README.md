@@ -41,6 +41,14 @@ update your `ember-cli-build.js` with
 return require('@embroider/compat').compatBuild(app, require('ember-webpack-hot-reload').Webpack, {...});
 ```
 
+can be disabled by setting 
+
+devServer.enabled = false;
+
+or just disable hot reload by setting
+
+devServer.hot = false
+
 ## Contributing
 
 See the [Contributing](CONTRIBUTING.md) guide for details.
