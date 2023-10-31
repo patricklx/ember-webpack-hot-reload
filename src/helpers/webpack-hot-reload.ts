@@ -4,7 +4,7 @@ import { registerDestructor } from '@ember/destroyable';
 import { service } from '@ember/service';
 import { getComponentTemplate } from '@ember/component';
 import Ember from 'ember';
-import WebpackHotReloadService from '../services/webpack-hot-reload';
+import WebpackHotReloadService from 'ember-webpack-hot-reload/services/webpack-hot-reload';
 
 const CurriedValue = (Ember as any).__loader.require('@glimmer/runtime').CurriedValue;
 
