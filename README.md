@@ -14,6 +14,11 @@ this will not work:
 ```hbs
 <this.MyComponent  {{this.myModifier}} />
 {{this.myHelper}}
+{{#let (component 'x') as |comp|}}
+  {{comp}} -- will no hot reload, not sure if this is a bug
+  <comp /> -- will hot reload
+  {{#comp}}{{/comp}} -- will hot reload
+{{/let}}
 ```
 
 ## Compatibility
