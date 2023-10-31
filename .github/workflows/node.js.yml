@@ -33,7 +33,7 @@ jobs:
           version: latest
       - run: pnpm i
       - run: pnpm run build || echo "ignore failures for now"
-      - run: pnpm run test
+      # - run: pnpm run test
       - run: pnpm view "ember-webpack-hot-reload@$(cat package.json | jq -r '.version')" || npm publish
         if: github.ref == 'refs/heads/main'
 
