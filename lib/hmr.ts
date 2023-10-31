@@ -13,7 +13,7 @@ export default function (this: any, source: string) {
   if (import.meta.webpackHot && window.emberHotReloadPlugin) {
       const result = window.emberHotReloadPlugin.canAcceptNew(__webpack_module__);
       if (!result) {
-        import.meta.webpackHot.invalidate();
+        import.meta.webpackHot.decline();
       } else {
         import.meta.webpackHot.accept()
       }
