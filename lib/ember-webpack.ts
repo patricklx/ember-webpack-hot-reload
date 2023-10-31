@@ -255,6 +255,15 @@ const Webpack: PackagerConstructor<Options> = class Webpack implements Packager 
             module: {
                 rules: [
                     {
+                        test: /\.(js|ts|gts|gjs|hbs)$/,
+                        enforce: 'post',
+                        use: [
+                            {
+                                loader: require.resolve('./hmr.js'),
+                            },
+                        ],
+                    },
+                    {
                         test: /\.hbs$/,
                         use: nonNullArray([
                             maybeThreadLoader(babel.isParallelSafe, this.extraThreadLoaderOptions),
