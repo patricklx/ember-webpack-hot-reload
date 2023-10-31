@@ -100,7 +100,6 @@ if (import.meta.webpackHot) {
     },
 
     canAcceptNew(module) {
-      console.log('module', module);
       let ok =
         module.id.includes('/helpers/') ||
         module.id.includes('/modifiers/') ||
@@ -172,7 +171,6 @@ export default class WebpackHotReloadService extends Service {
 
   init() {
     super.init();
-    console.log('this')
     modulePrefix = getOwner(this)!.application.modulePrefix;
     podModulePrefix = getOwner(this)!.application.podModulePrefix;
     this.router._router;

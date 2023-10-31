@@ -215,7 +215,7 @@ const Webpack: PackagerConstructor<Options> = class Webpack implements Packager 
         let babelLoaderPrefix = `babel-loader-9?${JSON.stringify(babelLoaderOptions.options)}!`;
         let htmlWebpackLoader = require.resolve('html-webpack-plugin/lib/loader');
         let emberHtmlLoader = require.resolve('./ember-html-loader');
-        let indexHtml = path.resolve(process.cwd(), '..', 'node_modules', '.embroider', 'rewritten-app', 'index.html')
+        let indexHtml = path.resolve(process.cwd(), 'node_modules', '.embroider', 'rewritten-app', 'index.html')
 
         return {
             mode: variant.optimizeForProduction ? 'production' : 'development',
