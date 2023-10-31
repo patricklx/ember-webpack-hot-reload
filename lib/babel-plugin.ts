@@ -1,5 +1,6 @@
 import type * as BabelCoreNamespace from '@babel/core';
-import { NodePath, parse, PluginObj } from '@babel/core';
+import { parse, PluginObj } from '@babel/core';
+import { NodePath } from '@babel/traverse';
 import type * as BabelTypesNamespace from '@babel/types';
 import { ExpressionStatement, Identifier, ImportDeclaration, Program, V8IntrinsicIdentifier } from '@babel/types';
 import * as glimmer from '@glimmer/syntax';
