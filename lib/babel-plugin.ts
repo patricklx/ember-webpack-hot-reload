@@ -371,7 +371,7 @@ export default function hotReplaceAst({ types: t }: { types: BabelTypes }, optio
           if (!filename.endsWith('.hbs') && !filename.endsWith('.gts') && filename.endsWith('.gjs')) {
             return;
           }
-          if (!filename.includes('.rewritten-app') && !(filename.includes('.rewritten-packages') && filename.includes(options.appName))) {
+          if (!filename.includes('rewritten-app') && !(filename.includes('rewritten-packages') && filename.includes(options.appName))) {
             return;
           }
           const node = path.node;

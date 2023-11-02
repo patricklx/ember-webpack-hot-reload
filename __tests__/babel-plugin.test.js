@@ -38,7 +38,7 @@ describe('convert template with hot reload helpers', () => {
 {{outlet}}
   \`);`
     const result = babel.transform(template, {
-      filename: 'file.hbs',
+      filename: '.embroider/rewritten-app/file.hbs',
       plugins: [plugin]
     });
     expect(result.code).toMatchSnapshot();
