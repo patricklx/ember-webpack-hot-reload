@@ -214,7 +214,7 @@ var hotAstProcessor = {
           blockParams,
         );
         if (p.parentNode.type === 'SubExpression') {
-          changes.push([p.parentNode, param]);
+          changes.push([node, param]);
           this.counter++;
           return;
         }
@@ -324,7 +324,7 @@ var hotAstProcessor = {
   },
 };
 
-export default function hotReplaceAst({ types: t }: { types: BabelTypes }) {
+export default function hotReplaceAst({ types: t }: { types: BabelTypes }, options) {
   let imports: string[] = [];
   let importMap: Record<string, string> = {};
   let tracked: Identifier;
@@ -369,6 +369,9 @@ export default function hotReplaceAst({ types: t }: { types: BabelTypes }) {
           imports = [];
           const filename = path.hub.file.opts.filename;
           if (!filename.endsWith('.hbs') && !filename.endsWith('.gts') && filename.endsWith('.gjs')) {
+            return;
+          }
+          if (!filename.includes('.rewritten-app') && !(filename.includes('.rewritten-packages') && filename.includes(options.appName))) {
             return;
           }
           const node = path.node;

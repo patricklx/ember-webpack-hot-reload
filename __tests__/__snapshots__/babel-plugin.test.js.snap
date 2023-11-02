@@ -8,7 +8,7 @@ precompileTemplate(\`
 {{!-- The following component displays Ember's default welcome message. --}}<br />
 {{#let (webpack-hot-reload (helper "print-number") type="helper") as |output|}}  helpler {{output}}
 {{/let}}{{!-- Feel free to remove this! --}}
-{{#let (webpack-hot-reload (component "my-comp") type="component") as |component_2|}}{{component_2 rootEventType=(webpack-hot-reload (helper "or") type="helper")}}{{/let}}
+{{#let (webpack-hot-reload (component "my-comp") type="component") as |component_2|}}{{component_2 rootEventType=((webpack-hot-reload (helper "or") type="helper") @rootEventType "click")}}{{/let}}
 
 
 {{#let this.FirstComponent as |output|}}  {{output}}
