@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`convert template with hot reload helpers should convert correctly 1`] = `
+"import precompileTemplate from '@ember/template-compilation';
+precompileTemplate(\`
+  {{#let (webpack-hot-reload (helper "page-title") type="helper") as |helper_0|}}{{helper_0 "HotReload"}}{{/let}}
+
+{{!-- The following component displays Ember's default welcome message. --}}<br />
+{{#let (webpack-hot-reload (helper "print-number") type="helper") as |output|}}  helpler {{output}}
+{{/let}}{{!-- Feel free to remove this! --}}
+{{#let (webpack-hot-reload (component "my-comp") type="component") as |component_2|}}{{component_2 rootEventType=(webpack-hot-reload (helper "or") type="helper")}}{{/let}}
+
+
+{{#let this.FirstComponent as |output|}}  {{output}}
+{{/let}}
+<div {{this.myModifier}}></div>
+
+{{#let (webpack-hot-reload (component "FirstComponent") type="component") as |component_4|}}{{component_4}}{{/let}}
+
+<br />
+26
+
+<br />
+
+{{this.x}}
+
+
+{{outlet}}
+  \`);"
+`;
