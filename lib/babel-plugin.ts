@@ -424,7 +424,7 @@ export default function hotReplaceAst({ types: t }: { types: BabelTypes }, optio
                     importVar.name,
                     imports,
                   );
-                  usedImports = new Set([...usedImports, ...hotAstProcessor.usedImports]);
+                  hotAstProcessor.usedImports.forEach(usedImports.add, usedImports);
                 }
                 if (
                   call.arguments[0].type === 'TemplateLiteral' &&
@@ -436,7 +436,7 @@ export default function hotReplaceAst({ types: t }: { types: BabelTypes }, optio
                       importVar.name,
                       imports,
                     );
-                  usedImports = new Set([...usedImports, ...hotAstProcessor.usedImports]);
+                  hotAstProcessor.usedImports.forEach(usedImports.add, usedImports);
                 }
               }
               if (
