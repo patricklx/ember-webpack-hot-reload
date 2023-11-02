@@ -8,6 +8,7 @@
     "rootDir": "lib",
     "allowJs": true,
     "target": "ES2020",
+    "module": "CommonJS",
     "noEmitOnError": false,
     "esModuleInterop": true,
     "declaration": true,
