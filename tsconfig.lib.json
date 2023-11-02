@@ -5,7 +5,9 @@
     "types/global.d.ts"
   ],
   "compilerOptions": {
+    "rootDir": "lib",
     "allowJs": true,
+    "target": "ES2020",
     "noEmitOnError": false,
     "esModuleInterop": true,
     "declaration": true,
