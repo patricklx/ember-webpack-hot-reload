@@ -144,9 +144,9 @@ var hotAstProcessor = {
             return;
           if (p.parentNode.params[0].original?.includes('.')) return;
           const sub = glimmer.builders.sexpr(
-            node.original,
-            [p.parentNode.params[0]],
-            glimmer.builders.hash([]),
+              node.original,
+              [...p.parentNode.params],
+              p.parentNode.hash,
           );
           const param = glimmer.builders.sexpr(
             'webpack-hot-reload',
@@ -170,7 +170,7 @@ var hotAstProcessor = {
           );
           const b = glimmer.builders.block(letBlock, params, null, block);
           if (p.parentNode.type === 'SubExpression') {
-            changes.push([node, param]);
+            changes.push([p.parentNode, param]);
             this.counter++;
             return;
           }

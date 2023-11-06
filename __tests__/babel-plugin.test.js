@@ -11,7 +11,7 @@ describe('convert template with hot reload helpers', () => {
 
 {{! The following component displays Ember's default welcome message. }}
 <br />
-{{#let (helper 'print-number') as |output|}}
+{{#let (helper 'print-number' x=1) as |output|}}
   helpler {{output}}
 {{/let}}
 {{! Feel free to remove this! }}

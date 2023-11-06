@@ -3,7 +3,7 @@
 exports[`convert template with hot reload helpers should convert basic-dropdown 1`] = `
 "import precompileTemplate from '@ember/template-compilation';
 precompileTemplate(\`
-{{#let (hash uniqueId=this.publicAPI.uniqueId isOpen=this.publicAPI.isOpen disabled=this.publicAPI.disabled actions=this.publicAPI.actions Trigger=(if (webpack-hot-reload (helper "eq" @triggerComponent undefined) type="helper") (webpack-hot-reload (component "basic-dropdown-trigger") type="component") (webpack-hot-reload (component (ensure-safe-component @triggerComponent)) type="component")) Content=(if ((webpack-hot-reload (helper "eq") type="helper") @contentComponent undefined) (webpack-hot-reload (component "basic-dropdown-content") type="component") (webpack-hot-reload (component (ensure-safe-component @contentComponent)) type="component"))) as |api|}}{{#if this.renderInPlace}}    <div class="ember-basic-dropdown" ...attributes>{{yield api}}</div>
+{{#let (hash uniqueId=this.publicAPI.uniqueId isOpen=this.publicAPI.isOpen disabled=this.publicAPI.disabled actions=this.publicAPI.actions Trigger=(if (webpack-hot-reload (helper "eq" @triggerComponent undefined) type="helper") (webpack-hot-reload (component "basic-dropdown-trigger" dropdown=(readonly this.publicAPI) hPosition=(readonly this.hPosition) renderInPlace=(readonly this.renderInPlace) vPosition=(readonly this.vPosition)) type="component") (webpack-hot-reload (component (ensure-safe-component @triggerComponent) dropdown=(readonly this.publicAPI) hPosition=(readonly this.hPosition) renderInPlace=(readonly this.renderInPlace) vPosition=(readonly this.vPosition)) type="component")) Content=(if ((webpack-hot-reload (helper "eq") type="helper") @contentComponent undefined) (webpack-hot-reload (component "basic-dropdown-content" dropdown=(readonly this.publicAPI) hPosition=(readonly this.hPosition) renderInPlace=(readonly this.renderInPlace) preventScroll=(readonly @preventScroll) rootEventType=(webpack-hot-reload (helper "or" @rootEventType "click") type="helper") vPosition=(readonly this.vPosition) destination=(readonly this.destination) top=(readonly this.top) left=(readonly this.left) right=(readonly this.right) width=(readonly this.width) height=(readonly this.height) otherStyles=(readonly this.otherStyles)) type="component") (webpack-hot-reload (component (ensure-safe-component @contentComponent) dropdown=(readonly this.publicAPI) hPosition=(readonly this.hPosition) renderInPlace=(readonly this.renderInPlace) preventScroll=(readonly @preventScroll) rootEventType=(webpack-hot-reload (helper "or" @rootEventType "click") type="helper") vPosition=(readonly this.vPosition) destination=(readonly this.destination) top=(readonly this.top) left=(readonly this.left) right=(readonly this.right) width=(readonly this.width) height=(readonly this.height) otherStyles=(readonly this.otherStyles)) type="component"))) as |api|}}{{#if this.renderInPlace}}    <div class="ember-basic-dropdown" ...attributes>{{yield api}}</div>
 {{else}}    {{yield api}}
 {{/if}}{{/let}}\`);"
 `;
@@ -14,9 +14,9 @@ precompileTemplate(\`
   {{#let (webpack-hot-reload (helper "page-title") type="helper") as |helper_0|}}{{helper_0 "HotReload"}}{{/let}}
 
 {{!-- The following component displays Ember's default welcome message. --}}<br />
-{{#let (webpack-hot-reload (helper "print-number") type="helper") as |output|}}  helpler {{output}}
+{{#let (webpack-hot-reload (helper "print-number" x=1) type="helper") as |output|}}  helpler {{output}}
 {{/let}}{{!-- Feel free to remove this! --}}
-{{#let (webpack-hot-reload (component "my-comp") type="component") as |component_2|}}{{component_2 rootEventType=(webpack-hot-reload (helper "or" @rootEventType "click") type="helper")}}{{/let}}
+{{#let (webpack-hot-reload (component "my-comp" rootEventType=(webpack-hot-reload (helper "or" @rootEventType "click") type="helper")) type="component") as |component_2|}}{{component_2 rootEventType=(webpack-hot-reload (helper "or" @rootEventType "click") type="helper")}}{{/let}}
 
 
 {{#let this.FirstComponent as |output|}}  {{output}}
