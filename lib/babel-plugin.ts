@@ -170,7 +170,7 @@ var hotAstProcessor = {
           );
           const b = glimmer.builders.block(letBlock, params, null, block);
           if (p.parentNode.type === 'SubExpression') {
-            changes.push([p.parentNode, param]);
+            changes.push([node, param]);
             this.counter++;
             return;
           }
