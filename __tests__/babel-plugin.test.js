@@ -123,4 +123,29 @@ as |api|
     });
     expect(result.code).toMatchSnapshot();
   })
+
+  it('should convert this', () => {
+    const tpl = `
+    {{#let (helper (ember-hbs-imports/helpers/lookup-helper this "ember-bscomponents/helpers/size-support")) as |imported_size|}}{{#let (helper (ember-hbs-imports/helpers/lookup-helper this "ember-bscomponents/helpers/or")) as |imported_or|}}
+
+
+
+<button {{on "click" this.onClick}} type="{{if @btnType @btnType "button"}}" class="btn {{imported_size "btn" this.args}} btn-{{if @type @type "default"}} {{if @isBlock "btn-block"}} {{if @isActive "active"}}" disabled={{imported_or this.isLoading @disabled}} ...attributes>
+{{#if @icon}}    <i class={{@icon}}></i>
+{{/if}}  {{@title}}
+  {{yield}}
+</button>
+
+{{/let}}{{/let}}
+`;
+    const code = `
+    import precompileTemplate from '@ember/template-compilation';
+    precompileTemplate(\`${tpl}\`);
+    `;
+    const result = babel.transform(code, {
+      filename: '.embroider/rewritten-app/file.hbs',
+      plugins: [plugin]
+    });
+    expect(result.code).toMatchSnapshot();
+  })
 });

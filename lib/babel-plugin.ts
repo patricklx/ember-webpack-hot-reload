@@ -119,6 +119,7 @@ var hotAstProcessor = {
           return;
         }
         if (node.original === 'this') return;
+        if (node.original.startsWith('@')) return;
         if (node.original === 'block') return;
         if (node.original.startsWith('this.')) return;
         if (findBlockParams(node.original.split('.')[0], p)) return;

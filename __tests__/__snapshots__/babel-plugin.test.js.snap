@@ -36,3 +36,20 @@ precompileTemplate(\`
 {{outlet}}
   \`);"
 `;
+
+exports[`convert template with hot reload helpers should convert this 1`] = `
+"import precompileTemplate from '@ember/template-compilation';
+precompileTemplate(\`
+    {{#let (webpack-hot-reload (helper (ember-hbs-imports/helpers/lookup-helper this "ember-bscomponents/helpers/size-support")) type="helper") as |imported_size|}}{{#let (webpack-hot-reload (helper (ember-hbs-imports/helpers/lookup-helper this "ember-bscomponents/helpers/or")) type="helper") as |imported_or|}}
+
+
+
+<button {{on "click" this.onClick}} type="{{if @btnType @btnType "button"}}" class="btn {{imported_size "btn" this.args}} btn-{{if @type @type "default"}} {{if @isBlock "btn-block"}} {{if @isActive "active"}}" disabled={{imported_or this.isLoading @disabled}} ...attributes>
+{{#if @icon}}    <i class={{@icon}}></i>
+{{/if}}  {{@title}}
+  {{yield}}
+</button>
+
+{{/let}}{{/let}}
+\`);"
+`;
