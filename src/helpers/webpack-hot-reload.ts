@@ -25,6 +25,7 @@ export default class WebpackHotReload extends Helper {
     this.resolver = app.__registry__.resolver;
     this.modulePrefix = app.modulePrefix;
     this.podModulePrefix = app.podModulePrefix;
+    if (!window.emberHotReloadPlugin) return;
     const bound = this.checkAndRecompute.bind(this);
     window.emberHotReloadPlugin.subscribe(bound);
     registerDestructor(this, () => {
@@ -76,6 +77,7 @@ export default class WebpackHotReload extends Helper {
   }
 
   compute(positional: any[], named: { type: string }) {
+    if (!window.emberHotReloadPlugin) return positional[0];
     if (this.current) {
       return this.current;
     }
