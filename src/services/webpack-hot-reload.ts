@@ -171,6 +171,7 @@ export default class WebpackHotReloadService extends Service {
 
   init() {
     super.init();
+    if (!window.emberHotReloadPlugin) return;
     modulePrefix = getOwner(this)!.application.modulePrefix;
     podModulePrefix = getOwner(this)!.application.podModulePrefix;
     this.router._router;
