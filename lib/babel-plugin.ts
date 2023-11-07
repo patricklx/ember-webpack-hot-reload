@@ -108,7 +108,7 @@ var hotAstProcessor = {
       if (!p.parent) return false;
       return findBlockParams(expression, p.parent as any);
     };
-    const changes: [ASTv1.Node, ASTv1.Node][] = [];
+    const changes: ASTv1.Node[] = [];
     const visitor: NodeVisitor = {
       PathExpression: (node, p) => {
         if (
@@ -146,8 +146,8 @@ var hotAstProcessor = {
           if (p.parentNode.params[0].original?.includes('.')) return;
           const sub = glimmer.builders.sexpr(
               node.original,
-              [...p.parentNode.params],
-              p.parentNode.hash,
+              [p.parentNode.params[0]],
+              glimmer.builders.hash([]),
           );
           const param = glimmer.builders.sexpr(
             'webpack-hot-reload',
@@ -166,16 +166,11 @@ var hotAstProcessor = {
           node.type = 'PathExpression';
           node.original = name;
           const block = glimmer.builders.blockItself(
-            [{ ...p.parentNode }],
+            [],
             blockParams,
           );
           const b = glimmer.builders.block(letBlock, params, null, block);
-          if (p.parentNode.type === 'SubExpression') {
-            changes.push([p.parentNode, param]);
-            this.counter++;
-            return;
-          }
-          changes.push([p.parentNode, b]);
+          changes.push(b);
           this.counter++;
           return;
         }
@@ -212,17 +207,11 @@ var hotAstProcessor = {
         node.original = name;
         if (!params.length) return;
         const block = glimmer.builders.blockItself(
-          [{ ...p.parentNode }],
+          [],
           blockParams,
         );
-        if (p.parentNode.type === 'SubExpression') {
-          p.parentNode.params.length = 0;
-          changes.push([p.parentNode, param]);
-          this.counter++;
-          return;
-        }
         const b = glimmer.builders.block(letBlock, params, null, block);
-        changes.push([p.parentNode!, b]);
+        changes.push(b);
         this.counter++;
       },
       ElementNode: (
@@ -298,30 +287,38 @@ var hotAstProcessor = {
           element.tag = name;
         }
         const block = glimmer.builders.blockItself(
-          [{ ...element }],
+          [],
           blockParams,
         );
         if (!params.length) return;
         const b = glimmer.builders.block(letBlock, params, null, block);
-        changes.push([element, b]);
+        changes.push(b);
         this.counter++;
       },
       Program: {
-        exit() {
-          changes.forEach(([oldNode, newNode]) => {
-            for (const member in oldNode) delete oldNode[member];
-            Object.assign(oldNode, newNode);
-          });
+        exit(program) {
+
         },
       },
     };
 
     glimmer.traverse(ast, visitor);
+
+    const program = ast;
+    let body = [...program.body];
+    for (const letBlock of changes) {
+      letBlock.program.body = body;
+      body = [letBlock];
+    }
+    program.body.length = 0;
+    program.body.push(...body)
+
     return usedImports;
   },
 
   processAst(contents: string, importVar?: string, imports?: string[]) {
     const ast = glimmer.preprocess(contents);
+    this.counter = 0;
     this.usedImports = this.replaceInAst(ast, importVar, imports);
     return glimmer.print(ast);
   },

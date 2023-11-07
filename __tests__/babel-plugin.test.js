@@ -148,4 +148,211 @@ as |api|
     });
     expect(result.code).toMatchSnapshot();
   })
+
+  it('should convert power-select', () => {
+    const tpl = `
+    <BasicDropdown
+  @horizontalPosition={{@horizontalPosition}}
+  @destination={{@destination}}
+  @initiallyOpened={{@initiallyOpened}}
+  @matchTriggerWidth={{this.matchTriggerWidth}}
+  @preventScroll={{or @preventScroll false}}
+  @onClose={{this.handleClose}}
+  @onOpen={{this.handleOpen}}
+  @renderInPlace={{@renderInPlace}}
+  @verticalPosition={{@verticalPosition}}
+  @disabled={{@disabled}}
+  @calculatePosition={{@calculatePosition}}
+  @triggerComponent={{ensure-safe-component @ebdTriggerComponent}}
+  @contentComponent={{ensure-safe-component @ebdContentComponent}}
+  as |dropdown|>
+  {{#let (assign dropdown (hash
+    selected=this.selected
+    highlighted=this.highlighted
+    options=this.options
+    results=this.results
+    resultsCount=this.resultsCount
+    loading=this.loading
+    isActive=this.isActive
+    searchText=this.searchText
+    lastSearchedText=this.lastSearchedText
+    actions=(assign dropdown.actions this._publicAPIActions)
+  )) (concat "ember-power-select-options-" dropdown.uniqueId) as |publicAPI listboxId|}}
+    <dropdown.Trigger
+      @eventType={{or @eventType "mousedown"}}
+      {{did-insert this._updateOptions @options}}
+      {{did-update this._updateOptions @options}}
+      {{did-insert this._updateSelected @selected}}
+      {{did-update this._updateSelected @selected}}
+      {{did-insert this._registerAPI publicAPI}}
+      {{did-update this._registerAPI publicAPI}}
+      {{did-update this._performSearch this.searchText}}
+      {{on "keydown" this.handleTriggerKeydown}}
+      {{on "focus" this.handleFocus}}
+      {{on "blur" this.handleBlur}}
+      class="ember-power-select-trigger {{@triggerClass}}{{if publicAPI.isActive " ember-power-select-trigger--active"}}"
+      aria-activedescendant={{if dropdown.isOpen (unless @searchEnabled (concat publicAPI.uniqueId "-" this.highlightedIndex))}}
+      aria-controls={{unless @searchEnabled listboxId}}
+      aria-describedby={{@ariaDescribedBy}}
+      aria-haspopup={{unless @searchEnabled "listbox"}}
+      aria-invalid={{@ariaInvalid}}
+      aria-label={{@ariaLabel}}
+      aria-labelledby={{@ariaLabelledBy}}
+      aria-owns=""
+      aria-required={{@required}}
+      role={{or @triggerRole "button"}}
+      title={{@title}}
+      id={{@triggerId}}
+      tabindex={{and (not @disabled) (or @tabindex "0")}}
+      ...attributes
+    >
+      {{#let 
+        (if 
+          @triggerComponent 
+          (component (ensure-safe-component @triggerComponent)) 
+          (component 'power-select/trigger')
+        ) 
+      as |Trigger|}}
+        <Trigger
+          @allowClear={{@allowClear}}
+          @buildSelection={{@buildSelection}}
+          @loadingMessage={{or @loadingMessage "Loading options..."}}
+          @selectedItemComponent={{ensure-safe-component @selectedItemComponent}}
+          @select={{publicAPI}}
+          @searchEnabled={{@searchEnabled}}
+          @searchField={{@searchField}}
+          @onFocus={{this.handleFocus}}
+          @onBlur={{this.handleBlur}}
+          @extra={{@extra}}
+          @listboxId={{listboxId}}
+          @onInput={{this.handleInput}}
+          @onKeydown={{this.handleKeydown}}
+          @placeholder={{@placeholder}}
+          @placeholderComponent={{if 
+            @placeholderComponent 
+            (ensure-safe-component @placeholderComponent) 
+            (component 'power-select/placeholder')
+          }}
+          @ariaActiveDescendant={{concat publicAPI.uniqueId "-" this.highlightedIndex}}
+          @ariaLabelledBy={{@ariaLabelledBy}}
+          @ariaLabel={{@ariaLabel}}
+          as |opt term|>
+          {{yield opt term}}
+        </Trigger>
+      {{/let}}
+    </dropdown.Trigger>
+    <dropdown.Content
+      class="ember-power-select-dropdown{{if publicAPI.isActive " ember-power-select-dropdown--active"}} {{@dropdownClass}}"
+      @animationEnabled={{@animationEnabled}}
+    >
+      {{#if (not-eq @beforeOptionsComponent null)}}
+        {{#let 
+          (if 
+            @beforeOptionsComponent 
+            (component (ensure-safe-component @beforeOptionsComponent))
+            (component 'power-select/before-options')
+          ) 
+        as |BeforeOptions|}}
+          <BeforeOptions
+            @select={{publicAPI}}
+            @searchEnabled={{@searchEnabled}}
+            @onInput={{this.handleInput}}
+            @onKeydown={{this.handleKeydown}}
+            @onFocus={{this.handleFocus}}
+            @onBlur={{this.handleBlur}}
+            @placeholder={{@placeholder}}
+            @placeholderComponent={{or @placeholderComponent (component 'power-select/placeholder')}}
+            @extra={{@extra}}
+            @listboxId={{listboxId}}
+            @ariaActiveDescendant={{concat publicAPI.uniqueId "-" this.highlightedIndex}}
+            @selectedItemComponent={{ensure-safe-component @selectedItemComponent}}
+            @searchPlaceholder={{@searchPlaceholder}}
+            @ariaLabel={{@ariaLabel}}
+            @ariaLabelledBy={{@ariaLabelledBy}}
+          />
+        {{/let}}
+      {{/if}}
+      {{#if this.mustShowSearchMessage}}
+        {{#let 
+          (if 
+            @searchMessageComponent 
+            (component (ensure-safe-component @searchMessageComponent))
+            (component 'power-select/search-message')
+          ) 
+        as |SearchMessage|}}
+          <SearchMessage 
+            @searchMessage={{this.searchMessage}}
+            @select={{publicAPI}}
+            id={{listboxId}} 
+            aria-label={{@ariaLabel}}
+            aria-labelledby={{@ariaLabelledBy}} 
+          /> 
+        {{/let}}
+      {{else if this.mustShowNoMessages}}
+        {{#let 
+          (if 
+            @noMatchesMessageComponent
+            (component (ensure-safe-component @noMatchesMessageComponent))
+            (component 'power-select/no-matches-message')
+          ) 
+         as |NoMatchesMessage|}}
+          <NoMatchesMessage 
+            @noMatchesMessage={{this.noMatchesMessage}} 
+            @select={{publicAPI}} 
+            id={{listboxId}} 
+            aria-label={{@ariaLabel}}
+            aria-labelledby={{@ariaLabelledBy}} 
+          />
+        {{/let}}
+      {{else}}
+        {{#let 
+          (if 
+            @optionsComponent
+            (component (ensure-safe-component @optionsComponent))
+            (component 'power-select/options')
+          ) 
+          (if 
+            @groupComponent
+            (component (ensure-safe-component @groupComponent))
+            (component 'power-select/power-select-group')
+          ) 
+        as |Options Group|}}
+          <Options
+            @loadingMessage={{or @loadingMessage "Loading options..."}}
+            @select={{publicAPI}}
+            @options={{publicAPI.results}}
+            @groupIndex=""
+            @optionsComponent={{Options}}
+            @extra={{@extra}}
+            @highlightOnHover={{this.highlightOnHover}}
+            @groupComponent={{Group}}
+            id={{listboxId}}
+            class="ember-power-select-options" as |option select|>
+            {{yield option select}}
+          </Options>
+        {{/let}}
+      {{/if}}
+      
+      {{#if @afterOptionsComponent}}
+        {{#let (component (ensure-safe-component @afterOptionsComponent)) as |AfterOptions|}}
+          <AfterOptions
+            @extra={{@extra}}
+            @select={{publicAPI}}
+          />
+        {{/let}}
+      {{/if}}
+    </dropdown.Content>
+  {{/let}}
+</BasicDropdown>
+    `;
+    const code = `
+    import precompileTemplate from '@ember/template-compilation';
+    precompileTemplate(\`${tpl}\`);
+    `;
+    const result = babel.transform(code, {
+      filename: '.embroider/rewritten-app/file.hbs',
+      plugins: [plugin]
+    });
+    expect(result.code).toMatchSnapshot();
+  })
 });
