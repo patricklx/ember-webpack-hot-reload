@@ -228,6 +228,8 @@ const Webpack: PackagerConstructor<Options> = class Webpack implements Packager 
                 ...stylePlugins,
                 new EmbroiderPlugin(resolverConfig, babelLoaderPrefix),
                 compiler => {
+                    compiler.hooks.shutdown.tap('EmbroiderPlugin', () => this.currentBuildPromiseResolve?.());
+                    compiler.hooks.failed.tap('EmbroiderPlugin', () => this.currentBuildPromiseResolve?.());
                     compiler.hooks.done.tapPromise('EmbroiderPlugin', async stats => {
                         this.summarizeStats(stats, variant, variantIndex);
                         this.currentBuildPromiseResolve?.();
