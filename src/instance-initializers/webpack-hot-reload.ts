@@ -1,6 +1,6 @@
 export function initialize(applicationInstance) {
   applicationInstance.lookup('service:webpack-hot-reload');
-  const resolver = application.__registry__.resolver._fallback || application.__registry__.resolver;
+  const resolver = applicationInstance.__registry__.resolver._fallback || application.__registry__.resolver;
   const resolverResolve = resolver.resolve;
   resolver.resolve = function (name) {
     name = name.replace(/--hot-version--.*$/, '');
