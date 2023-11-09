@@ -439,24 +439,7 @@ export default function hotReplaceAst({ types: t }: { types: BabelTypes }, optio
                   hotAstProcessor.usedImports.forEach(usedImports.add, usedImports);
                 }
               }
-              if (
-                (call.callee as V8IntrinsicIdentifier).name ===
-                  'precompileTemplate' &&
-                call.arguments[0]?.type === 'StringLiteral'
-              ) {
-                call.arguments[0].value = hotAstProcessor.processAst(
-                  call.arguments[0].value,
-                );
-              }
-              if (
-                  (call.callee as V8IntrinsicIdentifier).name ===
-                  'precompileTemplate' &&
-                  call.arguments[0]?.type === 'TemplateLiteral'
-              ) {
-                call.arguments[0].quasis[0].value.raw = hotAstProcessor.processAst(
-                    call.arguments[0].quasis[0].value.raw,
-                );
-              }
+
             },
           });
           if (!templateImportSpecifier) return;
@@ -515,6 +498,27 @@ export default function hotReplaceAst({ types: t }: { types: BabelTypes }, optio
           node.body.splice(idx, 0, importsVar, ifHot);
         },
       },
+      CallExpression(path) {
+        const call = path.node;
+        if (
+            (call.callee as V8IntrinsicIdentifier).name ===
+            'precompileTemplate' &&
+            call.arguments[0]?.type === 'StringLiteral'
+        ) {
+          call.arguments[0].value = hotAstProcessor.processAst(
+              call.arguments[0].value,
+          );
+        }
+        if (
+            (call.callee as V8IntrinsicIdentifier).name ===
+            'precompileTemplate' &&
+            call.arguments[0]?.type === 'TemplateLiteral'
+        ) {
+          call.arguments[0].quasis[0].value.raw = hotAstProcessor.processAst(
+              call.arguments[0].quasis[0].value.raw,
+          );
+        }
+      }
     },
   } as PluginObj;
 }
