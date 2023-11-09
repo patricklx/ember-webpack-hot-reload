@@ -356,6 +356,7 @@ const Webpack: PackagerConstructor<Options> = class Webpack implements Packager 
                     watch: false
                 },
                 hot: true,
+                port: 4222
             },
         }
         let config = this.variants.map((variant, variantIndex) =>
