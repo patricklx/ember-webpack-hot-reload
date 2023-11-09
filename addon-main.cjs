@@ -15,7 +15,7 @@ Object.assign(module.exports, {
     return addonOptions.babel;
   },
   included(...args) {
-    this._getBabelOptions().plugins.splice(0, 0, [require.resolve('./dist/lib/babel-plugin.js'), { v: 4, appName: this.app.name }]);
+    this._getBabelOptions().plugins.push([require.resolve('./dist/lib/babel-plugin.js'), { v: 4, appName: this.app.name }]);
     this._super.included; // need to access this somehow? otherwise it fails later on...
     included.call(this, ...args);
   }
